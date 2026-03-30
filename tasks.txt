@@ -1,0 +1,10 @@
+# Morning Briefing Bot — Daily Tasks
+# Edit this file. Lines starting with # are ignored.
+# One task per line.
+
+Review yesterday's code commits
+Check freelance client messages
+Work on current project for 2 hours
+Reply to pending emails
+Drink 8 glasses of water
+Read for 30 minutes before sleep

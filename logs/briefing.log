@@ -1,0 +1,24 @@
+2026-03-31 00:36:47 [INFO][BRIEFING]       Starting data fetch…
+2026-03-31 00:36:47 [INFO][WEATHER]        Unexpected error: 401 Client Error: Unauthorized for url: https://api.openweathermap.org/data/2.5/weather?q=Coimbatore&appid=b3fe78056e3cbe5a4e894b4ceee84079&units=metric
+2026-03-31 00:36:47 [INFO][NEWS]           NewsAPI failed (401 Client Error: Unauthorized for url: https://newsapi.org/v2/top-headlines?country=in&apiKey=69c341b41d24477dc8badfdfb48b5221&pageSize=5), falling back to RSS…
+2026-03-31 00:36:48 [INFO][QUOTE]          quotable.io failed (HTTPSConnectionPool(host='api.quotable.io', port=443): Max retries exceeded with url: /random?tags=motivational%7Ctechnology%7Csuccess (Caused by NameResolutionError("HTTPSConnection(host='api.quotable.io', port=443): Failed to resolve 'api.quotable.io' ([Errno 11002] getaddrinfo failed)"))), using fallback.
+2026-03-31 00:36:49 [INFO][NEWS]           Fetched 5 headlines from BBC RSS
+2026-03-31 00:36:49 [OK   ][BRIEFING]      All data fetched successfully.
+2026-03-31 00:36:50 [ERROR][AI]            Groq failed: Client.__init__() got an unexpected keyword argument 'proxies'
+2026-03-31 00:36:50 [OK   ][BRIEFING]      Briefing assembled (980 chars).
+2026-03-31 00:37:05 [OK   ][TELEGRAM]      Message delivered (attempt 1).
+2026-03-31 00:37:29 [INFO][SCHEDULER]      Morning Briefing Bot starting…
+2026-03-31 00:37:29 [INFO][SCHEDULER]      Scheduled time: 07:00 daily
+2026-03-31 00:37:29 [INFO][SCHEDULER]      Press Ctrl+C to stop.
+2026-03-31 00:37:29 [INFO][SCHEDULER]      Sending immediate briefing (--now flag)…
+2026-03-31 00:37:29 [INFO][SCHEDULER]      Triggering briefing at 00:37:29
+2026-03-31 00:37:29 [INFO][BRIEFING]       Starting data fetch…
+2026-03-31 00:37:30 [INFO][QUOTE]          quotable.io failed (HTTPSConnectionPool(host='api.quotable.io', port=443): Max retries exceeded with url: /random?tags=motivational%7Ctechnology%7Csuccess (Caused by NameResolutionError("HTTPSConnection(host='api.quotable.io', port=443): Failed to resolve 'api.quotable.io' ([Errno 11002] getaddrinfo failed)"))), using fallback.
+2026-03-31 00:37:30 [INFO][WEATHER]        Unexpected error: 401 Client Error: Unauthorized for url: https://api.openweathermap.org/data/2.5/weather?q=Coimbatore&appid=b3fe78056e3cbe5a4e894b4ceee84079&units=metric
+2026-03-31 00:37:30 [INFO][NEWS]           NewsAPI failed (401 Client Error: Unauthorized for url: https://newsapi.org/v2/top-headlines?country=in&apiKey=69c341b41d24477dc8badfdfb48b5221&pageSize=5), falling back to RSS…
+2026-03-31 00:37:31 [INFO][NEWS]           Fetched 5 headlines from BBC RSS
+2026-03-31 00:37:31 [OK   ][BRIEFING]      All data fetched successfully.
+2026-03-31 00:37:31 [ERROR][AI]            Groq failed: Client.__init__() got an unexpected keyword argument 'proxies'
+2026-03-31 00:37:31 [OK   ][BRIEFING]      Briefing assembled (974 chars).
+2026-03-31 00:37:32 [OK   ][TELEGRAM]      Message delivered (attempt 1).
+2026-03-31 00:37:32 [OK   ][SCHEDULER]     Briefing sent successfully ✓
