@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-main.py — Entry point for Morning Briefing Bot.
+main.py — Entry point for Morning Briefing Bot (GitHub Actions optimized)
 
 Usage:
-  python main.py              → Start scheduler (runs daily at configured time)
-  python main.py --now        → Send briefing right now + start scheduler
-  python main.py --preview    → Preview briefing in terminal (no Telegram send)
+  python main.py              → Send briefing once (default for GitHub)
+  python main.py --preview    → Preview briefing in terminal
   python main.py --test       → Test Telegram connection
   python main.py --check      → Check API config status
 """
@@ -16,78 +15,82 @@ import os
 # ── Ensure project root is in path ───────────────────────
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from src.config import validate_config, BRIEFING_TIME, WEATHER_CITY, NEWS_COUNTRY
+from src.config import validate_config, BRIEFING_TIME, WEATHER_CITY
 from src.logger import log, log_error
 
 
 def cmd_check():
-    """Check config validity and show status."""
     print("\n🔍 Configuration Check")
     print("─" * 40)
 
     from src.config import (
         WEATHER_API_KEY, NEWS_API_KEY, GROQ_API_KEY,
         TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID,
-        WEATHER_CITY, BRIEFING_TIME,
     )
 
     def status(val, name):
-        if val and not val.startswith("your_"):
+        if val:
             print(f"  ✅ {name}: Set")
         else:
             print(f"  ❌ {name}: NOT SET")
 
-    status(WEATHER_API_KEY,    "WEATHER_API_KEY   ")
-    status(NEWS_API_KEY,       "NEWS_API_KEY      ")
-    status(TELEGRAM_BOT_TOKEN, "TELEGRAM_BOT_TOKEN")
-    status(TELEGRAM_CHAT_ID,   "TELEGRAM_CHAT_ID  ")
-    status(GROQ_API_KEY,       "GROQ_API_KEY (opt)")
+    status(WEATHER_API_KEY, "WEATHER_API_KEY")
+    status(NEWS_API_KEY, "NEWS_API_KEY")
+    status(TELEGRAM_BOT_TOKEN, "TELEGRAM_TOKEN")
+    status(TELEGRAM_CHAT_ID, "CHAT_ID")
+    status(GROQ_API_KEY, "GROQ_API_KEY (optional)")
 
-    print(f"\n  📍 City       : {WEATHER_CITY}")
-    print(f"  ⏰ Schedule   : {BRIEFING_TIME} daily (IST)")
-    print()
+    print(f"\n  📍 City     : {WEATHER_CITY}")
+    print(f"  ⏰ Schedule : {BRIEFING_TIME} daily\n")
 
     missing = validate_config()
     if missing:
-        print(f"  ⚠️  Missing keys: {', '.join(missing)}")
-        print("  → Copy .env.example to .env and fill in your keys.\n")
+        print(f"⚠️ Missing: {', '.join(missing)}\n")
     else:
-        print("  ✅ All required keys are set. You're good to go!\n")
+        print("✅ All good!\n")
 
 
 def cmd_preview():
-    """Preview the briefing in the terminal."""
-    print("\n🌅 Generating briefing preview…\n")
+    print("\n🌅 Previewing briefing...\n")
     from src.briefing import generate_briefing
     msg = generate_briefing()
-    clean = msg.replace("*", "").replace("_", "")
-    print(clean)
+    print(msg)
 
 
 def cmd_test():
-    """Test Telegram connection."""
-    print("\n📡 Testing Telegram connection…")
+    print("\n📡 Testing Telegram...")
     from src.telegram_sender import test_connection
-    ok = test_connection()
-    if ok:
-        print("  ✅ Telegram connection OK! Check your chat.\n")
+    if test_connection():
+        print("✅ Telegram working!\n")
     else:
-        print("  ❌ Telegram delivery failed. Check your token and chat ID.\n")
+        print("❌ Telegram failed\n")
 
 
-def cmd_start(send_now: bool = False):
-    """Start the scheduler."""
+def send_once():
+    """Main function for GitHub Actions (run once and exit)"""
     missing = validate_config()
     if missing:
-        print(f"\n❌ Cannot start: missing config keys: {', '.join(missing)}")
-        print("   Run: python main.py --check\n")
+        print(f"❌ Missing config: {', '.join(missing)}")
         sys.exit(1)
 
-    from src.scheduler import start_scheduler
-    start_scheduler(send_now=send_now)
+    try:
+        from src.briefing import generate_briefing
+        from src.telegram_sender import send_message
+
+        print("🚀 Generating briefing...")
+        msg = generate_briefing()
+
+        print("📤 Sending to Telegram...")
+        send_message(msg)
+
+        print("✅ Done successfully!")
+
+    except Exception as e:
+        print("❌ Error:", str(e))
+        sys.exit(1)
 
 
-# ── CLI dispatch ──────────────────────────────────────────────────────────────
+# ── CLI ─────────────────────────────────────────────────
 if __name__ == "__main__":
     args = sys.argv[1:]
 
@@ -97,7 +100,5 @@ if __name__ == "__main__":
         cmd_preview()
     elif "--test" in args:
         cmd_test()
-    elif "--now" in args:
-        cmd_start(send_now=True)
     else:
-        cmd_start(send_now=True)
+        send_once()   # 🔥 ALWAYS run once (important)
