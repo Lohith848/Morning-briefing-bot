@@ -100,4 +100,4 @@ if __name__ == "__main__":
     elif "--now" in args:
         cmd_start(send_now=True)
     else:
-        cmd_start(send_now=False)
+        cmd_start(send_now=True)
