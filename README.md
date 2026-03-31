@@ -15,7 +15,7 @@ A GitHub Actions–powered Telegram bot that sends you a rich daily morning brie
 | ✅ **Today's Tasks** | Read from `tasks.txt` in the repo |
 | 🏋️ **Wellness Tip** | Daily rotating fitness/health tip (no API needed) |
 | 📚 **Word of the Day** | Daily vocabulary builder with definition & example |
-| 💰 **Crypto Snapshot** | Live BTC & ETH prices in INR with 24h change (CoinGecko, no key needed) |
+| 💰 **Crypto Snapshot** | Live BTC & ETH prices in INR with 24h change (CoinGecko, no key needed) and SENSEX ,NIFTY |
 | 💡 **Quote of the Day** | Motivational quote (quotable.io → curated fallback) |
 
 ---
