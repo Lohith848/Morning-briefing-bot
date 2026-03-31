@@ -7,7 +7,7 @@ Endpoint: api.openweathermap.org/data/2.5/weather
 import requests
 from datetime import datetime, timezone
 from src.config import WEATHER_API_KEY, WEATHER_CITY
-from src.logger import log
+from src.logger import log, log_error
 
 
 WEATHER_URL    = "https://api.openweathermap.org/data/2.5/weather"
@@ -102,12 +102,20 @@ def get_weather(city: str = WEATHER_CITY) -> str:
 
         return (
             f"{emoji} *Weather in {city}*\n"
-            f"  🌡️ {temp}°C (feels like {feels_like}°C)\n"
-            f"  {desc} | 💧 Humidity: {humidity}%\n"
-            f"  💨 Wind: {wind_kph} km/h{uv_line}\n"
-            f"  🌅 Sunrise: {sunrise_str} · 🌇 Sunset: {sunset_str}"
+            f"  {temp}°C (feels like {feels_like}°C)\n"
+            f"  {desc} | Humidity: {humidity}%\n"
+            f"  Wind: {wind_kph} km/h{uv_line}\n"
+            f"  Sunrise: {sunrise_str} · Sunset: {sunset_str}"
         )
 
+    except requests.exceptions.HTTPError as err:
+        log_error("WEATHER", f"HTTP Error: {err.response.status_code}")
+        if err.response.status_code == 401:
+            return "🌤️ *Weather in " + city + "*\n  Unavailable (Invalid API Key / Not Activated yet)"
+        elif err.response.status_code == 404:
+            return "🌤️ *Weather*\n  Unavailable (City not found: " + city + ")"
+        else:
+            return "🌤️ *Weather*\n  Unavailable (HTTP " + str(err.response.status_code) + ")"
     except requests.exceptions.ConnectionError:
         log("WEATHER", "Connection error — no internet?")
         return "🌤️ *Weather*\n  Unavailable (no connection)."
