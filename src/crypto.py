@@ -93,4 +93,4 @@ def get_crypto_snapshot() -> str:
     if not lines:
         return ""
 
-    return "💰 *Markets & Crypto Snapshot*\n" + "\n".join(lines)
+    return "💰 *Markets & Crypto Snapshot*\n\n" + "\n".join(lines)
