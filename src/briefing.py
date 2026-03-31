@@ -141,7 +141,7 @@ def generate_briefing() -> str:
 
     # ── Assemble ───────────────────────────────────────────────────────────
     message = (
-        f"🌻 *{greeting}, Lohith!*\n"
+        f"🌻 *{greeting}, Lohith!*\n\n"
         f"  📅 {day_str} · ⏰ {time_str}\n"
         f"\n{DIV}\n\n"
         f"{day_progress}\n"
