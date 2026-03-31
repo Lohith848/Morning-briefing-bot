@@ -1,30 +1,48 @@
-name: Morning Bot
+name: Morning Briefing Bot 🌅
 
 on:
   schedule:
-    - cron: '30 1 * * *'
-  workflow_dispatch:
+    # ⏰ 1:00 AM UTC = 6:30 AM IST  (30-min GitHub buffer → arrives ~7:00 AM IST)
+    # GitHub Actions can delay up to 15-30 min under heavy load.
+    # Running at 1:00 UTC instead of 1:30 UTC gives us that buffer.
+    - cron: '0 1 * * *'
+  workflow_dispatch:   # ← allows manual trigger from Actions tab
 
 jobs:
-  run-bot:
+  send-briefing:
     runs-on: ubuntu-latest
+    timeout-minutes: 10   # kill if something hangs
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install deps
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Run bot
+      - name: Run Morning Briefing Bot
         env:
           WEATHER_API_KEY: ${{ secrets.WEATHER_API_KEY }}
-          NEWS_API_KEY: ${{ secrets.NEWS_API_KEY }}
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          CHAT_ID: ${{ secrets.CHAT_ID }}
+          NEWS_API_KEY:    ${{ secrets.NEWS_API_KEY }}
+          TELEGRAM_TOKEN:  ${{ secrets.TELEGRAM_TOKEN }}
+          CHAT_ID:         ${{ secrets.CHAT_ID }}
+          GROQ_API_KEY:    ${{ secrets.GROQ_API_KEY }}
+          WEATHER_CITY:    ${{ secrets.WEATHER_CITY }}
         run: python main.py
+
+      - name: Report status
+        if: failure()
+        run: echo "❌ Morning briefing FAILED — check secrets and API keys"

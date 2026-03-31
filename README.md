@@ -1,73 +1,101 @@
-# 🌅 Morning Briefing Bot
+# 🌅 Morning Briefing Bot v2.0
 
-A personalized daily briefing bot that delivers **weather, news, tasks, and a motivational quote** every morning via Telegram — with optional AI insights via Groq (LLaMA 3.1).
-
----
-
-## ✨ Features
-
-| Feature | Source | Free? |
-|---|---|---|
-| 🌤 Weather | OpenWeatherMap API | ✅ Free tier |
-| 📰 News | NewsAPI → BBC RSS fallback | ✅ Free tier |
-| 💡 Quote | quotable.io → built-in fallback | ✅ Always free |
-| ✅ Tasks | Local `tasks.txt` file | ✅ Always free |
-| 🧠 AI Insight | Groq (LLaMA 3.1-8b-instant) | ✅ Free tier |
-| 📲 Delivery | Telegram Bot | ✅ Always free |
+A GitHub Actions–powered Telegram bot that sends you a rich daily morning briefing every day at **~7:00 AM IST**.
 
 ---
 
-## 🚀 Quick Start (5 Steps)
+## 📬 What You Get Every Morning
 
-### Step 1 — Clone & Install
+| Section | Details |
+|---|---|
+| 📊 **Day at a Glance** | Week bar, year-progress bar, day number |
+| ☀️ **Weather** | Temp, feels-like, humidity, wind, UV index, sunrise & sunset |
+| 📰 **Top Headlines** | 5 Indian news headlines (NewsAPI → BBC RSS fallback) |
+| 🧠 **AI Insight** _(optional)_ | Groq LLaMA-generated insight based on today's news |
+| ✅ **Today's Tasks** | Read from `tasks.txt` in the repo |
+| 🏋️ **Wellness Tip** | Daily rotating fitness/health tip (no API needed) |
+| 📚 **Word of the Day** | Daily vocabulary builder with definition & example |
+| 💰 **Crypto Snapshot** | Live BTC & ETH prices in INR with 24h change (CoinGecko, no key needed) |
+| 💡 **Quote of the Day** | Motivational quote (quotable.io → curated fallback) |
+
+---
+
+## ⏰ Timing — Why it Sometimes Arrives Late
+
+GitHub Actions uses **UTC** and free-tier runners can **delay up to 15–30 minutes** under load.
+
+| Setting | Value |
+|---|---|
+| Cron schedule | `0 1 * * *` (1:00 AM UTC) |
+| Equivalent IST | **6:30 AM IST** |
+| Expected arrival | **~7:00 AM IST** (30-min buffer for runner queue) |
+
+> **If it still arrives late:** This is a GitHub limitation. Upgrade to a paid plan or self-host a runner for exact timing.
+
+---
+
+## 🚀 Setup
+
+### 1. Fork / Clone this repo
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/YOUR_USERNAME/morning-briefing-bot
 cd morning-briefing-bot
+```
+
+### 2. Set GitHub Secrets
+
+Go to **Settings → Secrets and variables → Actions → New repository secret**:
+
+| Secret Name | Where to get it |
+|---|---|
+| `TELEGRAM_TOKEN` | [@BotFather](https://t.me/BotFather) on Telegram |
+| `CHAT_ID` | [@userinfobot](https://t.me/userinfobot) on Telegram |
+| `WEATHER_API_KEY` | [openweathermap.org](https://openweathermap.org/api) (free tier) |
+| `NEWS_API_KEY` | [newsapi.org](https://newsapi.org) (free tier) |
+| `GROQ_API_KEY` | [console.groq.com](https://console.groq.com) _(optional — for AI insight)_ |
+| `WEATHER_CITY` | Your city name e.g. `Coimbatore` _(optional, defaults to Coimbatore)_ |
+
+### 3. Edit your tasks
+
+Edit `tasks.txt` — one task per line. Lines starting with `#` are comments.
+
+```
+# tasks.txt
+Review PR before 10am
+Finish freelance invoice
+30-minute algorithm practice
+Evening walk
+```
+
+### 4. Enable GitHub Actions
+
+Go to **Actions tab** → Enable workflows → The bot runs automatically every morning.
+
+You can also trigger it manually: **Actions → Morning Briefing Bot → Run workflow**.
+
+---
+
+## 🛠️ Local Development
+
+```bash
+# Install dependencies
 pip install -r requirements.txt
-```
 
-### Step 2 — Get Your Free API Keys
-
-| Key | Where to get it | Time |
-|---|---|---|
-| OpenWeatherMap | https://openweathermap.org/api → "Get API Key" | 2 min |
-| NewsAPI | https://newsapi.org/register | 1 min |
-| Telegram Bot | Message `@BotFather` → `/newbot` | 2 min |
-| Telegram Chat ID | Message `@userinfobot` | 30 sec |
-| Groq (optional) | https://console.groq.com | 2 min |
-
-### Step 3 — Configure
-
-```bash
+# Copy env example and fill in your keys
 cp .env.example .env
-# Now edit .env with your keys
-```
 
-Your `.env` file:
-```env
-WEATHER_API_KEY=abc123...
-NEWS_API_KEY=xyz789...
-TELEGRAM_BOT_TOKEN=123456:ABC...
-TELEGRAM_CHAT_ID=987654321
-GROQ_API_KEY=gsk_...        # optional — for AI insights
-WEATHER_CITY=Coimbatore
-BRIEFING_TIME=07:00
-```
+# Preview briefing in terminal (no Telegram send)
+python main.py --preview
 
-### Step 4 — Verify Everything Works
+# Test Telegram connection
+python main.py --test
 
-```bash
-python main.py --check      # Check all API keys are set
-python main.py --preview    # See the briefing in terminal
-python main.py --test       # Send a test message to Telegram
-```
+# Check all config keys
+python main.py --check
 
-### Step 5 — Run It!
-
-```bash
-python main.py              # Start scheduler (runs daily at 07:00)
-python main.py --now        # Send immediately + start scheduler
+# Send briefing now
+python main.py
 ```
 
 ---
@@ -76,127 +104,89 @@ python main.py --now        # Send immediately + start scheduler
 
 ```
 morning-briefing-bot/
-├── main.py               ← Entry point (all commands)
-├── tasks.txt             ← Edit your daily tasks here
-├── .env                  ← Your API keys (never commit this)
-├── .env.example          ← Template for .env
+├── main.py                   # Entry point & CLI
+├── tasks.txt                 # Your daily task list
 ├── requirements.txt
-├── logs/
-│   └── briefing.log      ← Auto-created log file
+├── .env.example
+├── .github/
+│   └── workflows/
+│       └── morning.yml       # GitHub Actions schedule
 └── src/
-    ├── config.py         ← Loads .env, validates keys
-    ├── weather.py        ← OpenWeatherMap integration
-    ├── news.py           ← NewsAPI + BBC RSS fallback
-    ├── quotes.py         ← quotable.io + offline fallback
-    ├── tasks.py          ← Reads tasks.txt
-    ├── briefing.py       ← Assembles the full message
-    ├── telegram_sender.py← Delivers via Telegram (with retries)
-    ├── scheduler.py      ← APScheduler daily job
-    └── logger.py         ← Clean logging to console + file
+    ├── briefing.py           # Assembles the full message
+    ├── weather.py            # OpenWeatherMap (temp, UV, sunrise/sunset)
+    ├── news.py               # NewsAPI + BBC RSS fallback
+    ├── quotes.py             # quotable.io + curated fallback
+    ├── tasks.py              # Reads tasks.txt
+    ├── fitness.py            # 🆕 Daily wellness tip (no API)
+    ├── word_of_day.py        # 🆕 Daily vocabulary word (no API)
+    ├── crypto.py             # 🆕 BTC/ETH prices via CoinGecko (no API key)
+    ├── config.py             # Env var loading
+    ├── logger.py             # Simple logger
+    └── telegram_sender.py    # Sends message with retry logic
 ```
 
 ---
 
-## 🖥 CLI Commands
+## 📦 API Keys Summary
 
-```bash
-python main.py              # Start daily scheduler
-python main.py --now        # Send now + start scheduler
-python main.py --preview    # Terminal preview (no Telegram)
-python main.py --test       # Test Telegram connection
-python main.py --check      # Verify config / API keys
-```
-
----
-
-## ✅ How to Edit Your Tasks
-
-Just open `tasks.txt` and edit it:
-
-```
-# Lines starting with # are ignored
-
-Review pull requests
-Work on freelance project
-Gym session at 6pm
-Read for 30 minutes
-```
-
-Changes take effect the next time the briefing runs.
+| Service | Required | Free Tier | Key Name |
+|---|---|---|---|
+| OpenWeatherMap | ✅ Yes | ✅ Yes (1000 calls/day) | `WEATHER_API_KEY` |
+| NewsAPI | ✅ Yes | ✅ Yes (100 calls/day) | `NEWS_API_KEY` |
+| Telegram Bot | ✅ Yes | ✅ Free | `TELEGRAM_TOKEN` + `CHAT_ID` |
+| CoinGecko | ❌ No key needed | ✅ Free | — |
+| Groq (LLaMA AI) | ❌ Optional | ✅ Free | `GROQ_API_KEY` |
 
 ---
 
-## 🔁 Keep It Running 24/7
-
-### Option A — Linux/Mac (background process)
-```bash
-nohup python main.py > logs/output.log 2>&1 &
-```
-
-### Option B — systemd service (recommended for Linux VPS)
-```ini
-# /etc/systemd/system/morning-bot.service
-[Unit]
-Description=Morning Briefing Bot
-
-[Service]
-WorkingDirectory=/path/to/morning-briefing-bot
-ExecStart=/usr/bin/python3 main.py
-Restart=always
-
-[Install]
-WantedBy=multi-user.target
-```
-```bash
-sudo systemctl enable morning-bot
-sudo systemctl start morning-bot
-```
-
-### Option C — Deploy on Render/Railway (free cloud)
-1. Push to GitHub
-2. Connect repo to Render (Worker service)
-3. Set environment variables in Render dashboard
-4. Done — runs forever for free
-
----
-
-## 🧠 Sample Telegram Message
+## 📋 Sample Briefing Output
 
 ```
-🌅 Good morning, Think!
-  Monday, March 30 2026 · 07:00 AM
+🌻 Good morning, Lohith!
+  📅 Tuesday, March 31 2026 · ⏰ 07:00 AM
+
+━━━━━━━━━━━━━━━━━━━━━━
+
+📊 Day at a Glance
+  Week [●●◉○○○○]  Today: Tue
+  Year [████░░░░░░░░░░░░░░░░] 24.6% done
+  Day 91 of 365
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 ☀️ Weather in Coimbatore
-  Temp: 28°C (feels like 31°C)
-  Clear sky | Humidity: 65%
-  Wind: 12 km/h
+  🌡️ 31°C (feels like 35°C)
+  Haze | 💧 Humidity: 68%
+  💨 Wind: 14 km/h
+  ☀️ UV Index: 🔴 Very High (9)
+  🌅 Sunrise: 06:18 AM · 🌇 Sunset: 06:32 PM
 
 ━━━━━━━━━━━━━━━━━━━━━━
 
 📰 Top Headlines
-  1. Budget 2026 highlights — The Hindu
-  2. India's GDP grows 7.2% in Q3 — NDTV
-  3. SpaceX launches new satellite cluster — BBC
+  1. India's tech sector grows 18% YoY...
+  ...
 
-━━━━━━━━━━━━━━━━━━━━━━
+✅ Today's Tasks (3 items)
+  ☐ Review PR before 10am
+  ☐ Finish freelance invoice
+  ☐ 30-minute algorithm practice
 
-✅ Today's Tasks (4 items)
-  ☐ Review yesterday's code commits
-  ☐ Check freelance client messages
-  ☐ Work on current project for 2 hours
-  ☐ Read for 30 minutes before sleep
+🏋️ Wellness Tip  Hydration
+  💧 Drink a full glass of water right now — your body is 10% dehydrated after sleep.
 
-━━━━━━━━━━━━━━━━━━━━━━
+📚 Word of the Day
+  Tenacious (adj)
+  Holding firmly to purpose; persistent.
+  📝 "His tenacious work ethic made him irreplaceable."
+
+💰 Crypto Snapshot (24h change)
+  ₿ BTC: ₹72,45,300  🚀 +4.2%
+  Ξ ETH: ₹2,81,500   📈 +1.8%
 
 💡 Quote of the Day
-  "Small daily improvements lead to stunning results."
-  — Robin Sharma
-
-🧠 AI Insight
-  India's economic growth signals strong demand for tech
-  freelancers — now is the time to raise your rates.
+  "The secret of getting ahead is getting started."
+  — Mark Twain
 
 ━━━━━━━━━━━━━━━━━━━━━━
 Have a productive day! 🚀
@@ -204,30 +194,6 @@ Have a productive day! 🚀
 
 ---
 
-## 🛠 Troubleshooting
+## 🤝 Contributing
 
-| Problem | Fix |
-|---|---|
-| `WEATHER_API_KEY not set` | Run `--check`, fill `.env` |
-| News shows BBC instead of Indian news | Your NewsAPI free tier may be expired |
-| Telegram not receiving | Run `--test`, verify token + chat ID |
-| Briefing runs at wrong time | Check timezone — set to `Asia/Kolkata` |
-| `ModuleNotFoundError` | Run `pip install -r requirements.txt` |
-
----
-
-## 📈 Roadmap
-
-- [x] Weather, News, Quotes, Tasks
-- [x] Groq AI insight
-- [x] Telegram delivery with retries
-- [x] BBC RSS fallback
-- [ ] Voice briefing (pyttsx3 / ElevenLabs)
-- [ ] Web dashboard UI
-- [ ] WhatsApp delivery (via Cyrus bot)
-- [ ] Google Calendar sync
-- [ ] Smart topic preferences
-
----
-
-Built by Think 🧠 | Powered by free APIs
+PRs welcome! Ideas for new sections: Astronomy Picture of the Day, Hacker News top post, Stock market summary.
