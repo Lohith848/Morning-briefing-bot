@@ -1,10 +1,10 @@
-# 🌅 Morning Briefing Bot v2.0
+# Morning Briefing Bot
 
 A GitHub Actions–powered Telegram bot that sends you a rich daily morning briefing every day at **~7:00 AM IST**.
 
 ---
 
-## 📬 What You Get Every Morning
+## What You Get Every Morning
 
 | Section | Details |
 |---|---|
@@ -20,7 +20,7 @@ A GitHub Actions–powered Telegram bot that sends you a rich daily morning brie
 
 ---
 
-## ⏰ Timing — Why it Sometimes Arrives Late
+## Timing — Why it Sometimes Arrives Late
 
 GitHub Actions uses **UTC** and free-tier runners can **delay up to 15–30 minutes** under load.
 
@@ -34,7 +34,7 @@ GitHub Actions uses **UTC** and free-tier runners can **delay up to 15–30 minu
 
 ---
 
-## 🚀 Setup
+## Setup
 
 ### 1. Fork / Clone this repo
 
@@ -76,7 +76,7 @@ You can also trigger it manually: **Actions → Morning Briefing Bot → Run wor
 
 ---
 
-## 🛠️ Local Development
+## Local Development
 
 ```bash
 # Install dependencies
@@ -127,7 +127,7 @@ morning-briefing-bot/
 
 ---
 
-## 📦 API Keys Summary
+## API Keys Summary
 
 | Service | Required | Free Tier | Key Name |
 |---|---|---|---|
@@ -194,6 +194,5 @@ Have a productive day! 🚀
 
 ---
 
-## 🤝 Contributing
-
-PRs welcome! Ideas for new sections: Astronomy Picture of the Day, Hacker News top post, Stock market summary.
+## 🤝 Made by 
+Lohith G
