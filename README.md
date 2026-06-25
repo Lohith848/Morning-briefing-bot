@@ -1,6 +1,6 @@
-# Morning Briefing Bot
+# Morning Briefing Bot 
 
-A GitHub Actions–powered Telegram bot that sends you a rich daily morning briefing every day at **~7:00 AM IST**.
+A GitHub Actions–powered Telegram bot that sends you a rich daily morning briefing every day morning at **~7:00 AM IST**.
 
 ---
 
