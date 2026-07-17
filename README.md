@@ -34,7 +34,7 @@ GitHub Actions uses **UTC** and free-tier runners can **delay up to 15–30 minu
 
 ---
 
-## Setup
+## Setup.
 
 ### 1. Fork / Clone this repo
 
