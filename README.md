@@ -100,7 +100,7 @@ python main.py
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 morning-briefing-bot/
@@ -112,7 +112,7 @@ morning-briefing-bot/
 │   └── workflows/
 │       └── morning.yml       # GitHub Actions schedule
 └── src/
-    ├── briefing.py           # Assembles the full message
+    ├── briefing.py           # Assembles the full Project
     ├── weather.py            # OpenWeatherMap (temp, UV, sunrise/sunset)
     ├── news.py               # NewsAPI + BBC RSS fallback
     ├── quotes.py             # quotable.io + curated fallback
@@ -195,4 +195,5 @@ Have a productive day! 🚀
 ---
 
 ## Made by 
+
 Lohith G 🌻
