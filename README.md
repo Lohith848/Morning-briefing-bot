@@ -196,4 +196,4 @@ Have a productive day! 🚀
 
 ## Made by 
 
-Lohith G 🌻
+Lohith G.
