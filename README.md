@@ -194,6 +194,6 @@ Have a productive day! 🚀
 
 ---
 
-## Made by 
+## Author 
 
 Lohith G.
